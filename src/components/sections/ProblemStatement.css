@@ -1,0 +1,213 @@
+/* ─── SCROLL CONTAINER ─────────────────────────────────── */
+.problem-scroll-container {
+  position: relative;
+  height: 400vh;            /* 4× viewport = 3 cards + padding */
+  background: var(--bg);
+}
+
+.problem-sticky-wrapper {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+.problem-horizontal-track {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  width: 300vw;
+  will-change: transform;
+}
+
+/* ─── PANEL — full-vw viewport slot per card ───────────── */
+.wound-card-panel {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  padding: 0 6%;
+}
+
+/* ─── SECTION LABEL ────────────────────────────────────── */
+.wound-section-label {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.wound-section-label::before {
+  content: '';
+  display: inline-block;
+  width: 24px;
+  height: 1px;
+  background: var(--muted);
+}
+
+/* ─── CARD ─────────────────────────────────────────────── */
+.wound-card-content {
+  position: relative;
+  z-index: 10;
+
+  /* TIGHTER: no longer full-width, max ~560px */
+  max-width: 560px;
+  width: 100%;
+  padding: 2.5rem 3rem;
+
+  background: var(--glass-bg);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.65);
+  overflow: hidden;
+}
+
+/* Thin on-brand top border */
+.wound-card-content::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--sindoor) 0%, var(--patta) 100%);
+  z-index: 20;
+}
+
+/* ─── COUNTER ───────────────────────────────────────────── */
+.wound-number-wrapper {
+  display: flex;
+  align-items: baseline;
+  gap: 0.2em;
+  margin-bottom: 1.25rem;
+}
+
+.wound-number {
+  font-family: var(--font-mono);
+  font-size: clamp(3.5rem, 6vw, 5.5rem);   /* reduced from 10rem */
+  font-weight: 700;
+  color: var(--sindoor);
+  line-height: 1;
+  letter-spacing: -2px;
+}
+
+.wound-number-prefix {
+  font-family: var(--font-mono);
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  font-weight: 500;
+  color: var(--sindoor);
+}
+
+.wound-number-suffix {
+  font-family: var(--font-mono);
+  font-size: clamp(1.25rem, 2.5vw, 2rem);  /* reduced */
+  font-weight: 500;
+  color: var(--sindoor);
+  opacity: 0.7;
+}
+
+/* ─── STATEMENT TEXT ────────────────────────────────────── */
+.wound-text {
+  font-family: var(--font-heading);
+  font-size: clamp(1.3rem, 2.5vw, 2rem);   /* tighter */
+  color: var(--text);
+  line-height: 1.35;
+  margin-bottom: 1.25rem;
+}
+
+.wound-subtext {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+/* ─── PARALLAX BACKGROUNDS ─────────────────────────────── */
+.parallax-bg-layer {
+  position: absolute;
+  top: -20%; left: -20%; right: -20%; bottom: -20%;
+  z-index: 0;
+  opacity: 0.12;
+  pointer-events: none;
+  filter: blur(60px) saturate(1.8);
+}
+
+.bg-food {
+  background:
+    radial-gradient(circle at 25% 55%, rgba(232, 75, 53, 0.9)  0%, transparent 55%),
+    radial-gradient(circle at 75% 40%, rgba(232, 168, 56, 0.6) 0%, transparent 50%);
+}
+
+.bg-med {
+  background:
+    radial-gradient(circle at 55% 50%, rgba(61, 175, 114, 0.7) 0%, transparent 60%),
+    radial-gradient(circle at 20% 25%, rgba(200, 255, 87, 0.4) 0%, transparent 45%);
+}
+
+.bg-book {
+  background:
+    radial-gradient(circle at 40% 65%, rgba(158, 146, 132, 0.7) 0%, transparent 55%),
+    radial-gradient(circle at 75% 25%, rgba(232, 168, 56, 0.5)  0%, transparent 45%);
+}
+
+/* ─── PROGRESS DOTS ─────────────────────────────────────── */
+.wound-progress-dots {
+  position: absolute;
+  bottom: 2.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.5rem;
+  z-index: 20;
+}
+
+.wound-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--muted);
+  opacity: 0.3;
+  transition: opacity 0.4s ease, background 0.4s ease;
+}
+
+.wound-dot.active {
+  opacity: 1;
+  background: var(--sindoor);
+  box-shadow: 0 0 8px var(--sindoor);
+}
+@media (max-width: 768px) {
+  .problem-scroll-container {
+    height: 350vh; /* slightly less scroll space for mobile speed */
+  }
+  .wound-card-panel {
+    padding: 0 4%;
+  }
+  .wound-card-content {
+    padding: 2rem 1.75rem;
+    border-radius: 20px;
+  }
+  .wound-number {
+    font-size: 3.5rem;
+    letter-spacing: -1px;
+  }
+  .wound-text {
+    font-size: 1.25rem;
+  }
+  .wound-subtext {
+    font-size: 0.85rem;
+  }
+  .wound-progress-dots {
+    bottom: 1.5rem;
+  }
+}

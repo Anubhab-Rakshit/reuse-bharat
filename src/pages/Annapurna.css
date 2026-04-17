@@ -1,0 +1,378 @@
+/* ════════════════════════════════════════════════
+   Annapurna (Langar) Page
+════════════════════════════════════════════════ */
+
+.annapurna-page {
+  min-height: 100vh;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  padding-left: 100px;
+}
+
+@media (max-width: 768px) {
+  .annapurna-page {
+    padding-left: 0;
+    padding-bottom: 90px;
+  }
+}
+
+/* ─── Header ──────────────────────────────── */
+.anna-header {
+  position: relative;
+  width: 100%;
+  padding: 6rem 3rem 4rem;
+  background: linear-gradient(180deg, rgba(232, 168, 56, 0.15) 0%, transparent 100%);
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+  overflow: hidden;
+}
+
+.anna-header-bg-text {
+  position: absolute;
+  top: -10%; left: -5%;
+  font-family: var(--font-devanagari);
+  font-size: clamp(8rem, 20vw, 25rem);
+  font-weight: 700;
+  color: var(--haldi);
+  opacity: 0.05;
+  user-select: none;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.anna-header-content {
+  position: relative;
+  z-index: 10;
+  max-width: 800px;
+}
+
+.anna-title {
+  font-family: var(--font-heading);
+  font-size: clamp(3rem, 6vw, 4.5rem);
+  color: var(--text);
+  line-height: 1;
+  margin-bottom: 1rem;
+}
+
+.anna-subtitle {
+  font-family: var(--font-body);
+  font-size: 1.25rem;
+  color: var(--muted);
+  max-width: 600px;
+}
+
+/* ─── Sticky Filter Bar ─────────────────────── */
+.anna-filters-wrapper {
+  position: sticky;
+  top: 0; /* Sticks perfectly to the ceiling */
+  width: 100%;
+  padding: 1.5rem 3rem;
+  background: rgba(14, 12, 10, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  z-index: 50;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.anna-filters-track {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.anna-filters-track::-webkit-scrollbar {
+  display: none;
+}
+
+.filter-pill {
+  padding: 0.6rem 1.5rem;
+  border-radius: 99px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.filter-pill:hover {
+  background: rgba(255,255,255,0.08);
+  color: var(--text);
+}
+
+.filter-pill.active {
+  background: rgba(232, 168, 56, 0.1);
+  border-color: var(--haldi);
+  color: var(--haldi);
+  box-shadow: 0 0 15px rgba(232, 168, 56, 0.2);
+}
+
+/* ─── Grid Layout ─────────────────────────── */
+.anna-content-area {
+  padding: 3rem;
+  flex: 1;
+}
+
+.anna-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 1.5rem;
+}
+
+/* 6-card looping rhythm (12 columns scaled down to 6 for simplicity) */
+.anna-card-wrapper {
+  grid-column: span 6; /* default mobile */
+}
+
+@media (min-width: 1024px) {
+  /* Row 1: 2/3 (4) + 1/3 (2) */
+  .anna-card-wrapper:nth-child(6n + 1) { grid-column: span 4; }
+  .anna-card-wrapper:nth-child(6n + 2) { grid-column: span 2; }
+  
+  /* Row 2: 1/2 (3) + 1/2 (3) */
+  .anna-card-wrapper:nth-child(6n + 3) { grid-column: span 3; }
+  .anna-card-wrapper:nth-child(6n + 4) { grid-column: span 3; }
+  
+  /* Row 3: 1/3 (2) + 2/3 (4) */
+  .anna-card-wrapper:nth-child(6n + 5) { grid-column: span 2; }
+  .anna-card-wrapper:nth-child(6n + 6) { grid-column: span 4; }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  /* Basic 2 col on tablet */
+  .anna-card-wrapper { grid-column: span 3 !important; }
+}
+
+@media (max-width: 767px) {
+  .anna-header { padding: 4rem 1.5rem 3rem; }
+  .anna-filters-wrapper { padding: 1rem 1.5rem; }
+  .anna-content-area { padding: 1.5rem; }
+}
+
+/* ─── Food Card ───────────────────────────── */
+.anna-card {
+  position: relative;
+  height: 480px;
+  border-radius: 24px;
+  background: var(--glass-bg);
+  border: 1px solid rgba(255,255,255,0.05);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.anna-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+}
+
+.anna-card-image {
+  position: relative;
+  width: 100%;
+  height: 55%; /* ~60% minus aesthetic tweaks */
+  background-color: #1a1a1a;
+  overflow: hidden;
+}
+
+.anna-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s ease;
+}
+
+.anna-card:hover .anna-card-image img {
+  transform: scale(1.05);
+}
+
+.anna-gradient-overlay {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 60%;
+  background: linear-gradient(0deg, rgba(14,12,10,1) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+/* Pickup urgency badge */
+.anna-pickup-badge {
+  position: absolute;
+  top: 1rem; right: 1rem;
+  padding: 0.4rem 0.8rem;
+  border-radius: 99px;
+  background: rgba(14,12,10,0.8);
+  backdrop-filter: blur(10px);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text);
+  border: 1px solid rgba(255,255,255,0.1);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.pulse-urgent {
+  animation: urgent-pulse 2s infinite cubic-bezier(0.16, 1, 0.3, 1);
+  color: var(--sindoor);
+  border-color: rgba(232, 75, 53, 0.4);
+}
+
+@keyframes urgent-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(232, 75, 53, 0.6); }
+  70% { box-shadow: 0 0 0 10px rgba(232, 75, 53, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(232, 75, 53, 0); }
+}
+
+/* Card Body */
+.anna-card-body {
+  position: relative;
+  flex: 1;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.anna-card-title {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  color: var(--text);
+  line-height: 1.2;
+  margin-bottom: 0.5rem;
+}
+
+.anna-card-meta {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.anna-chip {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 6px;
+  background: rgba(255,255,255,0.04);
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+/* CTA Sweep Button */
+.anna-btn-claim {
+  margin-top: auto;
+  position: relative;
+  width: 100%;
+  padding: 1rem;
+  border-radius: 12px;
+  border: 1px solid var(--haldi);
+  background: transparent;
+  color: var(--haldi);
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: color 0.3s ease;
+}
+
+.anna-btn-claim::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: var(--haldi);
+  z-index: -1;
+  /* Clip-path sweeps from left 0 width to 100% width equivalent using polygon */
+  clip-path: polygon(0 0, 0 0, 0 100%, 0% 100%);
+  transition: clip-path 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.anna-btn-claim:hover {
+  color: var(--bg);
+}
+
+.anna-btn-claim:hover::before {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+}
+
+/* Claimed State Overlay */
+.anna-card.is-claimed .anna-card-image img {
+  filter: grayscale(1) brightness(0.4);
+}
+
+.anna-btn-claimed-state {
+  margin-top: auto;
+  width: 100%;
+  padding: 1rem;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.05);
+  color: var(--muted);
+  font-family: var(--font-mono);
+  text-align: center;
+  cursor: not-allowed;
+}
+
+.anna-stamp-claimed {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%) rotate(-15deg);
+  font-family: var(--font-heading);
+  font-size: 4rem;
+  font-weight: 800;
+  color: var(--sindoor);
+  border: 4px solid var(--sindoor);
+  padding: 0.5rem 1.5rem;
+  border-radius: 8px;
+  opacity: 0.7;
+  z-index: 20;
+  pointer-events: none;
+  text-transform: uppercase;
+  letter-spacing: 5px;
+}
+
+/* ─── Empty State ─────────────────────────── */
+.anna-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 8rem 2rem;
+  text-align: center;
+  gap: 2rem;
+}
+
+.bowl-anim-wrapper {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  animation: rock-bowl 4s ease-in-out infinite alternate;
+}
+
+.empty-bowl-svg {
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: var(--muted);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.3;
+}
+
+@keyframes rock-bowl {
+  from { transform: rotate(-8deg); }
+  to { transform: rotate(8deg); }
+}
+
+.anna-empty-text {
+  font-family: var(--font-body);
+  font-size: 1.1rem;
+  color: var(--muted);
+  max-width: 300px;
+  opacity: 0.8;
+}

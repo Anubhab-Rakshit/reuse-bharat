@@ -1,0 +1,182 @@
+.footer-wrapper {
+  position: relative;
+  width: 100%;
+  /* Push slightly negative margin if needed to overlap CTA seamless, but transparent bg makes it okay */
+  background: transparent;
+  z-index: 20;
+}
+
+.footer-card {
+  position: relative;
+  width: 100%;
+  margin: 0 auto;
+  min-height: 400px;
+  /* Top curve */
+  border-top-left-radius: 50% 100px;
+  border-top-right-radius: 50% 100px;
+  background: var(--surface);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  overflow: hidden;
+  padding: 6rem 4rem 4rem;
+  display: flex;
+  align-items: flex-end;
+}
+
+/* Subtle Shimmer Sweep background */
+.footer-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(
+    90deg, 
+    transparent 0%, 
+    rgba(255,255,255,0.02) 40%, 
+    rgba(255,255,255,0.05) 50%, 
+    rgba(255,255,255,0.02) 60%, 
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: sweep-shimmer 8s linear infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+@keyframes sweep-shimmer {
+  0% { background-position: -100% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.footer-content {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+/* ─── Columns ───────────────────────────────────────────── */
+
+/* Left: Super Monogram */
+.footer-col-left {
+  flex: 1;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.footer-monogram {
+  font-family: var(--font-heading);
+  font-size: clamp(8rem, 15vw, 15rem);
+  font-weight: 700;
+  color: var(--muted);
+  opacity: 0.1;
+  line-height: 0.8;
+  letter-spacing: -5px;
+  user-select: none;
+  position: absolute;
+  left: -2%;
+  bottom: -5%;
+}
+
+/* Center: Tagline, Socials, Copyright */
+.footer-col-center {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 2rem;
+}
+
+.footer-tagline {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  color: var(--text);
+  opacity: 0.9;
+}
+
+.footer-social-dock {
+  display: flex;
+  gap: 1rem;
+}
+
+.social-circle {
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  text-decoration: none;
+}
+
+.social-circle:hover {
+  background: var(--text);
+  color: var(--bg);
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+}
+
+.footer-copyright {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--muted);
+  opacity: 0.6;
+}
+
+/* Right: Ethos */
+.footer-col-right {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.footer-ethos {
+  font-family: var(--font-body);
+  font-size: 1.1rem;
+  color: var(--muted);
+  font-style: italic;
+  opacity: 0.8;
+  text-align: right;
+  max-width: 200px;
+}
+
+@media (max-width: 1024px) {
+  .footer-card {
+    border-top-left-radius: 50% 40px;
+    border-top-right-radius: 50% 40px;
+    padding: 4rem 1.5rem 2rem;
+    min-height: auto;
+  }
+  
+  .footer-content {
+    flex-direction: column;
+    align-items: center;
+    gap: 3rem;
+  }
+  
+  .footer-col-left {
+    display: none; /* Hide massive monogram on small screens to save space */
+  }
+  
+  .footer-col-right, .footer-ethos {
+    justify-content: center;
+    text-align: center;
+    margin-top: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .footer-tagline {
+    font-size: 1.2rem;
+  }
+  .footer-social-dock {
+    gap: 0.75rem;
+  }
+  .social-circle {
+    width: 40px;
+    height: 40px;
+  }
+}

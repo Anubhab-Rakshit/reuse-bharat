@@ -1,0 +1,218 @@
+.impact-section {
+  position: relative;
+  width: 100%;
+  padding: 8rem 0;
+  background: var(--bg);
+  overflow: hidden;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Lissajous animation background */
+.impact-mesh-bg {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.12;
+}
+
+.mesh-blob {
+  position: absolute;
+  width: 50vw; height: 50vh;
+  border-radius: 50%;
+  filter: blur(100px);
+}
+
+.blob-haldi {
+  background: var(--haldi);
+  top: 0; left: 10%;
+  animation: lissajous-haldi 25s infinite linear;
+}
+
+.blob-patta {
+  background: var(--patta);
+  top: 20%; left: 50%;
+  animation: lissajous-patta 30s infinite linear;
+}
+
+@keyframes lissajous-haldi {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(20vw, 15vh); }
+  50% { transform: translate(-10vw, 30vh); }
+  75% { transform: translate(-25vw, 10vh); }
+  100% { transform: translate(0, 0); }
+}
+
+@keyframes lissajous-patta {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(-15vw, 20vh); }
+  50% { transform: translate(15vw, -5vh); }
+  75% { transform: translate(25vw, 15vh); }
+  100% { transform: translate(0, 0); }
+}
+
+/* Ticker construction */
+.impact-ticker-wrapper {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  z-index: 10;
+  display: flex;
+}
+
+.impact-ticker-track {
+  display: flex;
+  white-space: nowrap;
+  /* Time needs to be relatively slow so it's readable */
+  animation: ticker-scroll 30s linear infinite;
+  will-change: transform;
+}
+
+.impact-ticker-track:hover {
+  animation-play-state: paused;
+}
+
+@keyframes ticker-scroll {
+  0% { transform: translateX(0); }
+  /* Translate exactly 50% so the duplicated set loops seamlessly */
+  100% { transform: translateX(-50%); } 
+}
+
+.impact-metric-item {
+  display: flex;
+  align-items: center;
+  padding: 0 4rem;
+}
+
+.impact-metric-data {
+  display: flex;
+  flex-direction: column;
+}
+
+.metric-number-wrapper {
+  display: flex;
+  align-items: baseline;
+  gap: 0.2em;
+}
+
+.metric-number {
+  font-family: var(--font-mono);
+  font-size: clamp(5rem, 8vw, 8rem);
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1;
+  letter-spacing: -2px;
+}
+
+.metric-suffix {
+  font-family: var(--font-mono);
+  font-size: clamp(2.5rem, 4vw, 4rem);
+  font-weight: 500;
+  color: var(--text);
+  opacity: 0.5;
+}
+
+.metric-label {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  color: var(--muted);
+  margin-top: 1rem;
+}
+
+/* Separator Monogram */
+.impact-separator {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  border: 1px dashed rgba(255,255,255, 0.2);
+  font-family: var(--font-heading);
+  font-size: 1.75rem;
+  color: var(--text);
+  opacity: 0.3;
+  flex-shrink: 0;
+  margin: 0 2rem;
+}
+
+/* Progress Bar Container */
+.impact-progress-container {
+  width: 100%;
+  max-width: 1000px;
+  margin: 8rem auto 0;
+  padding: 0 2rem;
+  z-index: 10;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+.progress-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--muted);
+}
+
+.progress-label {
+  font-size: 0.9rem;
+}
+
+.progress-pct {
+  font-size: 0.9rem;
+  color: var(--text);
+  font-weight: 600;
+}
+
+.progress-track {
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  transform-origin: left;
+}
+
+@media (max-width: 768px) {
+  .impact-section {
+    padding: 4rem 0;
+  }
+  .impact-metric-item {
+    padding: 0 2rem;
+  }
+  .metric-number {
+    font-size: clamp(3rem, 12vw, 4.5rem);
+  }
+  .metric-suffix {
+    font-size: 1.5rem;
+  }
+  .metric-label {
+    font-size: 1.1rem;
+    margin-top: 0.5rem;
+  }
+  .impact-separator {
+    width: 50px;
+    height: 50px;
+    font-size: 1.2rem;
+    margin: 0 1rem;
+  }
+  .impact-progress-container {
+    margin-top: 4rem;
+    gap: 2rem;
+  }
+}

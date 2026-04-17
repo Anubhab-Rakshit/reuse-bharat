@@ -1,0 +1,172 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Noto+Serif+Devanagari:wght@100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+
+:root {
+  /* Color Palette */
+  --bg: #0E0C0A;
+  --surface: #1E1A16;
+  --text: #F2EDE6;
+  --muted: #9E9284;
+  --haldi: #E8A838;
+  --patta: #3DAF72;
+  --sindoor: #E84B35;
+  --bijli: #C8FF57;
+  
+  --border-color: rgba(232, 168, 56, 0.12);
+  --glass-bg: rgba(30, 26, 22, 0.85);
+
+  /* Typography */
+  --font-heading: 'Playfair Display', serif;
+  --font-body: 'DM Sans', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-devanagari: 'Noto Serif Devanagari', serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+}
+
+/* Base Glassmorphism Class */
+.glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+}
+
+/* Global Texture Rule - 4-6% opacity CSS grain */
+.global-noise {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* App layout wrapper to accommodate left floating pill navigation */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  position: relative;
+}
+
+.main-content {
+  flex: 1;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Large Devanagari text styling for background */
+.devanagari-bg-text {
+  font-family: var(--font-devanagari);
+  font-size: clamp(5rem, 40vw, 15rem);
+  opacity: 0.06;
+  position: absolute;
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
+}
+
+/* Reusable CTA button style */
+.btn-primary {
+  background-color: var(--bijli);
+  color: var(--bg);
+  font-family: var(--font-body);
+  font-weight: 600;
+  padding: 0.75rem 1.75rem;
+  border-radius: 99px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.btn-primary:hover {
+  box-shadow: 0 0 15px var(--bijli);
+  transform: scale(1.02);
+}
+
+/* Reusable outline button style */
+.btn-outline {
+  background: transparent;
+  color: var(--text);
+  font-family: var(--font-body);
+  border: 1px dashed var(--muted);
+  border-radius: 99px;
+  padding: 0.75rem 1.75rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-outline:hover {
+  border-color: var(--text);
+  animation: border-rotate 4s linear infinite;
+}
+
+@keyframes border-rotate {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Reusable Shimmer Reveal effect */
+.shimmer-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer-card::after {
+  content: '';
+  position: absolute;
+  top: -150%;
+  left: -150%;
+  width: 400%;
+  height: 400%;
+  background: linear-gradient(
+    45deg,
+    transparent 45%,
+    rgba(255, 255, 255, 0.05) 48%,
+    rgba(255, 255, 255, 0.08) 50%,
+    rgba(255, 255, 255, 0.05) 52%,
+    transparent 55%
+  );
+  transform: rotate(-45deg);
+  transition: transform 0s;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.shimmer-card:hover::after {
+  transform: rotate(-45deg) translate(30%, 30%);
+  transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Mobile responsive utils */
+@media (max-width: 1024px) {
+  .btn-primary, .btn-outline {
+    width: 100%;
+    text-align: center;
+    padding: 1.1rem 1.5rem;
+  }
+}

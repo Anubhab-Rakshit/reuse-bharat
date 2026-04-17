@@ -1,0 +1,569 @@
+/* ═══════════════════════════════════════════════
+   Dashboard Page — "Mission Control"
+   Vanilla CSS + Component Composition
+═══════════════════════════════════════════════ */
+
+/* ─── Page Shell ────────────────────────────── */
+.dashboard-page {
+  min-height: 100vh;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  padding-left: 100px; /* Make room for floating Navigation */
+}
+
+/* ─── Top Bar ───────────────────────────────── */
+.dashboard-topbar {
+  width: 100%;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2.5rem;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  background: rgba(14,12,10,0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.topbar-avatar {
+  width: 42px; height: 42px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--haldi), var(--sindoor));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--bg);
+  border: 2px solid rgba(255,255,255,0.1);
+  flex-shrink: 0;
+}
+
+.topbar-greeting {
+  display: flex;
+  flex-direction: column;
+}
+
+.greeting-namaste {
+  font-family: var(--font-devanagari);
+  font-size: 0.85rem;
+  color: var(--muted);
+  line-height: 1;
+}
+
+.greeting-name {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  color: var(--text);
+  line-height: 1;
+  margin-top: 0.2em;
+}
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.topbar-brand {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  color: var(--text);
+  letter-spacing: -1px;
+  opacity: 0.9;
+}
+
+.topbar-brand span {
+  color: var(--haldi);
+}
+
+.notif-wrapper {
+  position: relative;
+  cursor: pointer;
+  color: var(--muted);
+  transition: color 0.3s ease;
+}
+
+.notif-wrapper:hover { color: var(--text); }
+
+.notif-badge {
+  position: absolute;
+  top: -4px; right: -4px;
+  width: 10px; height: 10px;
+  background: var(--sindoor);
+  border-radius: 50%;
+  border: 2px solid var(--bg);
+  animation: badge-pulse 2s ease-in-out infinite;
+}
+
+@keyframes badge-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(232, 75, 53, 0.6); }
+  50% { box-shadow: 0 0 0 6px rgba(232, 75, 53, 0); }
+}
+
+/* ─── Bento Grid ────────────────────────────── */
+.dashboard-bento {
+  padding: 2rem 2.5rem 4rem;
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: auto;
+  gap: 1.25rem;
+}
+
+/* ─── Bento Cell Base ───────────────────────── */
+.bento-cell {
+  position: relative;
+  background: linear-gradient(145deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+  border: 1px solid rgba(255,255,255,0.03);
+  border-radius: 24px; /* Slightly softer corners for premium feel */
+  padding: 2rem;
+  overflow: hidden;
+  transition: transform 0.3s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  box-shadow: 0 10px 40px -10px rgba(0,0,0,0.3);
+}
+
+.bento-cell:hover {
+  transform: translateY(-2px);
+}
+
+.bento-cell::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.03;
+  pointer-events: none;
+  border-radius: 20px;
+}
+
+/* Grid Placements */
+.bento-cell-1 { grid-column: span 2; grid-row: span 2; }  /* Impact Ring - Large */
+.bento-cell-2 { grid-column: span 1; grid-row: span 3; }  /* Active Listings - Tall */
+.bento-cell-3 { grid-column: span 1; grid-row: span 1; }  /* Quick Action - Small */
+.bento-cell-4 { grid-column: span 1; grid-row: span 1; }  /* Sustainability Score */
+.bento-cell-5 { grid-column: span 2; grid-row: span 1; }  /* Recent Activity - Wide */
+.bento-cell-6 { grid-column: span 1; grid-row: span 1; }  /* Saved Items */
+
+.bento-label {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.bento-label::before {
+  content: '';
+  display: block;
+  width: 16px; height: 1px;
+  background: var(--muted);
+  opacity: 0.5;
+}
+
+/* ─── Cell 1: Impact Ring ───────────────────── */
+.impact-rings-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  position: relative;
+  height: 200px;
+}
+
+.ring-svg {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.ring-track {
+  fill: none;
+  stroke: rgba(255,255,255,0.05);
+}
+
+.ring-fill {
+  fill: none;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: rotate(-90deg);
+  transform-origin: center;
+}
+
+.ring-label-center {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+}
+
+.ring-big-num {
+  font-family: var(--font-mono);
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1;
+}
+
+.ring-big-label {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-top: 0.3em;
+}
+
+.impact-legend {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.legend-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+}
+
+/* ─── Cell 2: Active Listings ───────────────── */
+.listings-scroll {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  overflow-y: auto;
+  max-height: 450px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.1) transparent;
+  padding-right: 0.5rem;
+}
+
+.listing-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1rem;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.03);
+  transition: background 0.2s ease;
+  border-left: 3px solid transparent;
+}
+
+.listing-item:hover { background: rgba(255,255,255,0.06); }
+
+.listing-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.listing-title {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.listing-meta {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.listing-status {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  padding: 0.2em 0.6em;
+  border-radius: 99px;
+  background: rgba(255,255,255,0.05);
+  color: var(--muted);
+  align-self: flex-start;
+  white-space: nowrap;
+}
+
+/* ─── Cell 3: Quick Action (Animated Dashed border) */
+.quick-action-cell {
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  text-align: center;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
+.quick-action-inner {
+  position: absolute;
+  inset: 0;
+  border-radius: 24px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  padding: 1.75rem;
+}
+
+/* animated dashed border via SVG rect trick */
+.quick-action-border-svg {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  pointer-events: none;
+}
+
+.qa-border-rect {
+  fill: rgba(200, 255, 87, 0.02);
+  stroke: var(--bijli);
+  stroke-width: 1.5;
+  stroke-dasharray: 6 6;
+  rx: 23; ry: 23; /* Matching border-radius - 1px */
+  animation: dash-spin 6s linear infinite;
+  stroke-dashoffset: 0;
+  transition: fill 0.3s ease;
+}
+
+.quick-action-cell:hover .qa-border-rect {
+  fill: rgba(200, 255, 87, 0.05);
+}
+
+@keyframes dash-spin {
+  to { stroke-dashoffset: -100; }
+}
+
+.quick-action-plus {
+  width: 52px; height: 52px;
+  border-radius: 50%;
+  background: rgba(200, 255, 87, 0.08);
+  border: 1px solid var(--bijli);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: var(--bijli);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), background 0.3s ease;
+}
+
+.quick-action-cell:hover .quick-action-plus {
+  transform: rotate(90deg);
+  background: rgba(200, 255, 87, 0.15);
+}
+
+.quick-action-label {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--bijli);
+}
+
+/* ─── Cell 4: Sustainability Score ─────────── */
+.score-display {
+  display: flex;
+  align-items: baseline;
+  gap: 0.25rem;
+  margin: 1rem 0 0.5rem;
+}
+
+.score-number {
+  font-family: var(--font-mono);
+  font-size: 5rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -3px;
+}
+
+.score-suffix {
+  font-family: var(--font-mono);
+  font-size: 2rem;
+  color: var(--muted);
+}
+
+.score-arc-track {
+  height: 4px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 99px;
+  overflow: hidden;
+  margin: 0.5rem 0;
+}
+
+.score-arc-fill {
+  height: 100%;
+  border-radius: 99px;
+  transition: width 1.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.score-label {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+/* ─── Cell 5: Activity Timeline ────────────── */
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  position: relative;
+}
+
+.timeline-item {
+  display: flex;
+  gap: 1.25rem;
+  align-items: flex-start;
+  position: relative;
+  padding-bottom: 1.25rem;
+}
+
+.timeline-item:last-child { padding-bottom: 0; }
+
+.timeline-spine {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.timeline-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  border: 2px solid;
+  background: var(--bg);
+  flex-shrink: 0;
+  margin-top: 4px;
+}
+
+.timeline-line {
+  width: 1px;
+  flex: 1;
+  min-height: 24px;
+  background: rgba(255,255,255,0.07);
+  margin-top: 4px;
+}
+
+.timeline-item:last-child .timeline-line { display: none; }
+
+.timeline-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.timeline-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.85rem;
+  border-radius: 99px;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 600;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.06);
+  color: var(--text);
+  width: fit-content;
+}
+
+.timeline-time {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--muted);
+  opacity: 0.7;
+}
+
+/* ─── Cell 6: Saved Items ───────────────────── */
+.saved-big {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 1rem 0 0.5rem;
+}
+
+.saved-number {
+  font-family: var(--font-mono);
+  font-size: 4rem;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1;
+  letter-spacing: -2px;
+}
+
+.heart-icon {
+  color: var(--sindoor);
+  animation: heartbeat 1.5s ease-in-out infinite;
+}
+
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); }
+  14% { transform: scale(1.2); }
+  28% { transform: scale(1); }
+  42% { transform: scale(1.15); }
+  56% { transform: scale(1); }
+}
+
+.saved-sub {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+/* ─── Responsive ────────────────────────────── */
+@media (max-width: 1200px) {
+  .dashboard-bento {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .bento-cell-1 { grid-column: span 2; }
+  .bento-cell-2 { grid-column: span 1; grid-row: span 1; }
+  .bento-cell-5 { grid-column: span 2; }
+}
+
+@media (max-width: 768px) {
+  .dashboard-page {
+    padding-left: 0;
+    padding-bottom: 90px; /* Space for mobile nav dock */
+  }
+  .dashboard-topbar {
+    padding: 0 1.5rem;
+  }
+  .dashboard-bento {
+    grid-template-columns: 1fr;
+    padding: 1rem;
+  }
+  .bento-cell-1, .bento-cell-2, .bento-cell-5 { grid-column: span 1; }
+  .topbar-brand { display: none; }
+}
