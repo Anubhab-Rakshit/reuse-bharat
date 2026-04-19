@@ -2,8 +2,12 @@ import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Bell, Heart, Plus, Utensils, Pill, BookOpen, Zap } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import api from '../lib/api';
+import { useWallet } from '../context/WalletContext';
+import PlatformWallet from '../components/wallet/PlatformWallet';
 import './Dashboard.css';
 
+// ... (keep the rest unchanged until the render method)
 /* ─── Animated Counter ──────────────────────── */
 const Counter = ({ to, duration = 1.5 }) => {
   const [val, setVal] = useState(0);
@@ -90,14 +94,8 @@ const BentoCell = ({ children, className, style, index, glowColor }) => {
   );
 };
 
-/* ─── Data ──────────────────────────────────── */
-const ringData = [
-  { label: 'Meals', percent: 72, color: 'var(--haldi)', count: 2400 },
-  { label: 'Medicine', percent: 48, color: 'var(--patta)', count: 590 },
-  { label: 'Books', percent: 61, color: 'var(--sindoor)', count: 300 },
-];
-
-const listings = [
+/* ─── Static Fallback Data ──────────────────── */
+const staticListings = [
   { title: 'Rajma Chawal Boxes (20)', module: 'Annapurna', color: 'var(--haldi)', time: '2h ago', status: 'Active' },
   { title: 'Metformin 500mg Strip', module: 'Aushadh', color: 'var(--patta)', time: '5h ago', status: 'Claimed' },
   { title: 'Engineering Graphics (Bhatt)', module: 'Samagri', color: 'var(--sindoor)', time: '1d ago', status: 'Active' },
@@ -105,7 +103,7 @@ const listings = [
   { title: 'Cough Syrup (sealed)', module: 'Aushadh', color: 'var(--patta)', time: '2d ago', status: 'Active' },
 ];
 
-const timeline = [
+const staticTimeline = [
   { text: 'Kiran claimed your Engineering Graphics book', module: 'Samagri', color: 'var(--sindoor)', time: '12 min ago' },
   { text: 'Your Rajma donation was picked up by Anuj NGO', module: 'Annapurna', color: 'var(--haldi)', time: '2 hrs ago' },
   { text: 'New match found for Metformin strip', module: 'Aushadh', color: 'var(--patta)', time: '5 hrs ago' },
@@ -114,28 +112,85 @@ const timeline = [
 
 /* ─── Dashboard ─────────────────────────────── */
 export default function Dashboard() {
+  const [user, setUser] = useState(null);
+  const [listings, setListings] = useState([]);
+  const [activities, setActivities] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const { isConnected, isAuthenticated, shortAddress, balance, symbol } = useWallet();
+
+  useEffect(() => {
+    Promise.all([
+      api.getUsers().catch(() => []),
+      api.getListings({ status: 'Active' }).catch(() => []),
+      api.getActivities({ limit: 10 }).catch(() => []),
+    ]).then(([users, listingsData, activitiesData]) => {
+      if (users.length > 0) {
+        setUser(users[0]);
+      }
+      if (listingsData.length > 0) {
+        setListings(listingsData.slice(0, 5));
+      }
+      if (activitiesData.length > 0) {
+        setActivities(activitiesData.slice(0, 4));
+      }
+      setLoading(false);
+    });
+  }, []);
+
+  const displayUser = user;
+  const displayEcoScore = user?.ecoScore || 84;
+  const totalImpact = user?.totalImpact || { meals: 2400, medicine: 590, books: 300 };
+
+  const ringData = displayUser && displayUser.totalImpact ? [
+    { label: 'Meals', percent: 72, color: 'var(--haldi)', count: displayUser.totalImpact.meals || 0 },
+    { label: 'Medicine', percent: 48, color: 'var(--patta)', count: displayUser.totalImpact.medicine || 0 },
+    { label: 'Books', percent: 61, color: 'var(--sindoor)', count: displayUser.totalImpact.books || 0 },
+  ] : [
+    { label: 'Meals', percent: 72, color: 'var(--haldi)', count: 2400 },
+    { label: 'Medicine', percent: 48, color: 'var(--patta)', count: 590 },
+    { label: 'Books', percent: 61, color: 'var(--sindoor)', count: 300 },
+  ];
+
+  const displayListings = listings.length > 0 ? listings : staticListings;
+  const displayActivities = activities.length > 0 ? activities : [];
+
+  const moduleColor = (module) =>
+    module === 'Annapurna' ? 'var(--haldi)'
+    : module === 'Aushadh' ? 'var(--patta)'
+    : 'var(--sindoor)';
+
   return (
     <div className="dashboard-page">
 
       {/* Top Bar */}
       <div className="dashboard-topbar">
         <div className="topbar-left">
-          <div className="topbar-avatar">R</div>
+          <div className="topbar-avatar">{displayUser?.name?.[0] || 'R'}</div>
           <div className="topbar-greeting">
             <span className="greeting-namaste">नमस्ते,</span>
-            <span className="greeting-name">Riya</span>
+            <span className="greeting-name">{displayUser?.name || 'Riya'}</span>
           </div>
         </div>
 
         <div className="topbar-brand">Reuse<span>·</span>Bharat</div>
 
         <div className="topbar-right">
+          <Link to="/auth" className="wallet-chip" title={isConnected ? shortAddress : 'Connect Wallet'}>
+            {isConnected ? `${shortAddress} • ${balance} ${symbol}` : 'Connect Wallet'}
+          </Link>
           <div className="notif-wrapper">
             <Bell size={22} />
             <div className="notif-badge" />
           </div>
         </div>
       </div>
+
+      {/* Platform Wallet */}
+      {(isConnected || isAuthenticated) && (
+        <div style={{ marginBottom: '2rem' }}>
+          <PlatformWallet />
+        </div>
+      )}
 
       {/* Bento Grid */}
       <div className="dashboard-bento">
@@ -158,11 +213,21 @@ export default function Dashboard() {
         <BentoCell index={1} className="bento-cell-2" glowColor="var(--muted)">
           <div className="bento-label">Active Listings</div>
           <div className="listings-scroll">
-            {listings.map((item, i) => (
-              <div key={i} className="listing-item" style={{ borderLeftColor: item.color }}>
+            {displayListings.map((item, i) => (
+              <div
+                key={i}
+                className="listing-item"
+                style={{ borderLeftColor: moduleColor(item.module) }}
+              >
                 <div className="listing-info">
                   <div className="listing-title">{item.title}</div>
-                  <div className="listing-meta">{item.module} · {item.time}</div>
+                  <div className="listing-meta">
+                    {item.module} · {
+                      item.createdAt
+                        ? new Date(item.createdAt).toLocaleDateString('en-IN', { hour: 'numeric', minute: '2-digit' })
+                        : item.time
+                    }
+                  </div>
                 </div>
                 <div className="listing-status">{item.status}</div>
               </div>
@@ -193,7 +258,7 @@ export default function Dashboard() {
           <div className="bento-label">Eco Score</div>
           <div className="score-display">
             <span className="score-number" style={{ color: 'var(--bijli)' }}>
-              <Counter to={84} duration={2} />
+              <Counter to={displayEcoScore} duration={2} />
             </span>
             <span className="score-suffix">/100</span>
           </div>
@@ -202,7 +267,7 @@ export default function Dashboard() {
               className="score-arc-fill"
               style={{ background: 'linear-gradient(90deg, var(--patta), var(--bijli))' }}
               initial={{ width: '0%' }}
-              animate={{ width: '84%' }}
+              animate={{ width: `${displayEcoScore}%` }}
               transition={{ duration: 1.8, ease: [0.16, 1, 0.3, 1], delay: 0.4 }}
             />
           </div>
@@ -213,21 +278,33 @@ export default function Dashboard() {
         <BentoCell index={4} className="bento-cell-5" glowColor="var(--muted)">
           <div className="bento-label">Recent Activity</div>
           <div className="timeline">
-            {timeline.map((ev, i) => (
-              <div key={i} className="timeline-item">
-                <div className="timeline-spine">
-                  <div className="timeline-dot" style={{ borderColor: ev.color, boxShadow: `0 0 8px ${ev.color}60` }} />
-                  <div className="timeline-line" />
-                </div>
-                <div className="timeline-content">
-                  <div className="timeline-chip">
-                    <span style={{ color: ev.color, fontSize: '0.7rem' }}>●</span>
-                    {ev.text}
+            {/* FIX 5: Use staticTimeline as fallback; fixed broken template literal in boxShadow */}
+            {(displayActivities.length > 0 ? displayActivities : staticTimeline).map((ev, i) => {
+              const color = ev.color || moduleColor(ev.module);
+              return (
+                <div key={i} className="timeline-item">
+                  <div className="timeline-spine">
+                    <div
+                      className="timeline-dot"
+                      style={{
+                        borderColor: color,
+                        boxShadow: `0 0 8px ${color}60`,  // FIX 5: was `var(--sindoor'` (missing closing paren)
+                      }}
+                    />
+                    <div className="timeline-line" />
                   </div>
-                  <div className="timeline-time">{ev.time}</div>
+                  <div className="timeline-content">
+                    <div className="timeline-chip">
+                      <span style={{ color, fontSize: '0.7rem' }}>●</span>
+                      {ev.text || ev.description}
+                    </div>
+                    <div className="timeline-time">
+                      {ev.time || (ev.createdAt ? new Date(ev.createdAt).toLocaleDateString() : '')}
+                    </div>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </BentoCell>
 

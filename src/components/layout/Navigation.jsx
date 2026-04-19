@@ -1,6 +1,8 @@
 import React, { useState, createContext, useContext } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { Home, LayoutDashboard, Utensils, Pill, BookOpen, PlusCircle } from "lucide-react";
+import Magnetic from "../ui/Magnetic";
+import { useWallet } from "../../context/WalletContext";
 import './Navigation.css';
 
 // Sidebar Context for state management
@@ -28,11 +30,14 @@ const navItems = [
   { label: "Aushadh Mitra", path: "/aushadh", icon: <Pill size={22} />, color: "var(--patta)" },
   { label: "College Samagri", path: "/samagri", icon: <BookOpen size={22} />, color: "var(--sindoor)" },
   { label: "Post New", path: "/post", icon: <PlusCircle size={22} />, color: "var(--bijli)" },
+  { label: "Security", path: "/profile-setup", icon: <Shield size={22} />, color: "var(--bijli)" },
 ];
+
 
 export default function Navigation() {
   const { open, setOpen } = useSidebar();
   const location = useLocation();
+  const { isConnected, shortAddress, balance, symbol } = useWallet();
 
   return (
     <nav 
@@ -54,10 +59,11 @@ export default function Navigation() {
               className={`nav-item ${isActive ? 'active' : ''}`}
             >
               <div className="nav-icon-wrapper" style={{ color: isActive ? item.color : "inherit" }}>
-                <div className="nav-icon">
-                  {item.icon}
-                </div>
-                {/* Optional subtle dot for active indicator or status */}
+                <Magnetic strength={0.4}>
+                  <div className="nav-icon">
+                    {item.icon}
+                  </div>
+                </Magnetic>
                 <div className="nav-dot" style={{ backgroundColor: item.color, borderColor: 'var(--surface)' }} />
               </div>
               <span className="nav-label">
@@ -67,6 +73,18 @@ export default function Navigation() {
           );
         })}
       </div>
+
+      <NavLink to="/auth" className={`nav-wallet-panel ${location.pathname === '/auth' ? 'active' : ''}`}>
+        <div className="wallet-title">Wallet</div>
+        {isConnected ? (
+          <>
+            <div className="wallet-address">{shortAddress}</div>
+            <div className="wallet-balance">{balance} {symbol}</div>
+          </>
+        ) : (
+          <div className="wallet-address">Connect MetaMask</div>
+        )}
+      </NavLink>
     </nav>
   );
 }

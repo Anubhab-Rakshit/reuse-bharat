@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import Magnetic from '../ui/Magnetic';
 import './Hero.css';
 
 export default function Hero() {
@@ -46,10 +48,14 @@ export default function Hero() {
         </p>
 
         <div className="hero-ctas">
-          <button className="btn-primary hero-btn-glow">Start Giving</button>
-          <button className="btn-outline hero-btn-dashed">
-            <span className="btn-text">Explore Platform</span>
-          </button>
+          <Magnetic strength={0.4}>
+            <button className="btn-primary hero-btn-glow">Start Giving</button>
+          </Magnetic>
+          <Magnetic strength={0.4}>
+            <button className="btn-outline hero-btn-dashed">
+              <span className="btn-text">Explore Platform</span>
+            </button>
+          </Magnetic>
         </div>
       </div>
 

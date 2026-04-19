@@ -33,6 +33,8 @@ dist-ssr
 .env.development.local
 .env.test.local
 .env.production.local
+.env.example
+
 
 # Vite
 src/vite-env.d.ts

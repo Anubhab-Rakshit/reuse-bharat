@@ -78,7 +78,7 @@ export default function UniverseDock() {
         {modules.map((mod, idx) => (
           <motion.div
             key={idx}
-            className={`module-card ${mod.tintClass} ${mod.posClass}`}
+            className={`module-card shimmer-card ${mod.tintClass} ${mod.posClass}`}
             initial={{ opacity: 0, rotateY: 15, y: 50 }}
             whileInView={{ opacity: 1, rotateY: 0, y: 0 }}
             viewport={{ once: true, margin: "-50px" }}

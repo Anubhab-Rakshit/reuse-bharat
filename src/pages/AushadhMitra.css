@@ -1,0 +1,483 @@
+/* ════════════════════════════════════════════════
+   Aushadh Mitra (The Dispensary) Page
+════════════════════════════════════════════════ */
+
+.aushadh-page {
+  min-height: 100vh;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  padding-left: 100px;
+  position: relative;
+}
+
+.grain-overlay {
+  position: fixed;
+  inset: 0;
+  background-image: url("https://grainy-gradients.vercel.app/noise.svg");
+  opacity: 0.05;
+  pointer-events: none;
+  z-index: 100;
+  filter: contrast(150%) brightness(150%);
+}
+
+@media (max-width: 768px) {
+  .aushadh-page {
+    padding-left: 0;
+    padding-bottom: 90px;
+  }
+}
+
+/* ─── Header ──────────────────────────────── */
+.aushadh-header {
+  position: relative;
+  width: 100%;
+  padding: 8rem 4rem 6rem;
+  background: radial-gradient(circle at 70% 20%, rgba(61, 175, 114, 0.1) 0%, transparent 50%);
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+  overflow: hidden;
+}
+
+.aushadh-header-bg-text {
+  position: absolute;
+  top: -5%; left: -5%;
+  font-family: var(--font-devanagari);
+  font-size: clamp(8rem, 20vw, 22rem);
+  font-weight: 700;
+  color: var(--patta);
+  opacity: 0.03;
+  user-select: none;
+  pointer-events: none;
+  z-index: 0;
+  filter: blur(2px);
+}
+
+.aushadh-header-content {
+  position: relative;
+  z-index: 10;
+  max-width: 850px;
+}
+
+.aushadh-overline {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  color: var(--patta);
+  margin-bottom: 1.5rem;
+  display: block;
+  opacity: 0.8;
+}
+
+.aushadh-title {
+  font-family: var(--font-heading);
+  font-size: clamp(3.5rem, 8vw, 5.5rem);
+  color: var(--text);
+  line-height: 0.95;
+  margin-bottom: 1.5rem;
+  font-weight: 800;
+}
+
+.aushadh-subtitle {
+  font-family: var(--font-body);
+  font-size: 1.35rem;
+  color: var(--muted);
+  max-width: 650px;
+  line-height: 1.6;
+}
+
+/* Floating Pills */
+.aushadh-decor-pills {
+  position: absolute;
+  top: 0; right: 0; bottom: 0; left: 0;
+  pointer-events: none;
+}
+
+.floating-pill-1, .floating-pill-2 {
+  position: absolute;
+  width: 180px;
+  height: 80px;
+  border-radius: 40px;
+  background: linear-gradient(135deg, rgba(61, 175, 114, 0.1), transparent);
+  border: 1px solid rgba(61, 175, 114, 0.2);
+  backdrop-filter: blur(8px);
+}
+
+.floating-pill-1 {
+  top: 15%; right: 10%;
+  transform: rotate(25deg);
+  animation: float-1 8s infinite ease-in-out;
+}
+
+.floating-pill-2 {
+  bottom: 20%; right: 25%;
+  width: 120px; height: 55px;
+  transform: rotate(-15deg);
+  animation: float-2 10s infinite ease-in-out;
+  opacity: 0.6;
+}
+
+@keyframes float-1 {
+  0%, 100% { transform: translate(0, 0) rotate(25deg); }
+  50% { transform: translate(-20px, 30px) rotate(35deg); }
+}
+
+@keyframes float-2 {
+  0%, 100% { transform: translate(0, 0) rotate(-15deg); }
+  50% { transform: translate(30px, -20px) rotate(-5deg); }
+}
+
+/* ─── Sticky Filter Bar ─────────────────────── */
+.aushadh-filters-wrapper {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  padding: 1.25rem 4rem;
+  background: rgba(14, 12, 10, 0.7);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  z-index: 50;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+}
+
+.aushadh-filters-track {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.aushadh-filter-pill {
+  padding: 0.5rem 1.25rem;
+  border-radius: 99px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.05);
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.aushadh-filter-pill:hover {
+  border-color: var(--patta);
+  color: var(--text);
+}
+
+.aushadh-filter-pill.active {
+  background: var(--patta);
+  border-color: var(--patta);
+  color: var(--bg);
+  font-weight: 600;
+  box-shadow: 0 4px 20px rgba(61, 175, 114, 0.3);
+}
+
+.aushadh-search-box {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.6rem 1.25rem;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 99px;
+  color: var(--muted);
+  width: 300px;
+  transition: all 0.3s ease;
+}
+
+.aushadh-search-box:focus-within {
+  border-color: var(--patta);
+  background: rgba(255,255,255,0.05);
+  width: 350px;
+}
+
+.aushadh-search-box input {
+  background: none;
+  border: none;
+  color: var(--text);
+  outline: none;
+  font-size: 0.9rem;
+  width: 100%;
+}
+
+/* ─── Grid Layout ─────────────────────────── */
+.aushadh-content-area {
+  padding: 4rem;
+  flex: 1;
+}
+
+.aushadh-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 2rem;
+}
+
+.aushadh-card-wrapper {
+  grid-column: span 6;
+}
+
+@media (min-width: 1200px) {
+  .aushadh-card-wrapper:nth-child(6n + 1) { grid-column: span 4; }
+  .aushadh-card-wrapper:nth-child(6n + 2) { grid-column: span 2; }
+  .aushadh-card-wrapper:nth-child(6n + 3) { grid-column: span 3; }
+  .aushadh-card-wrapper:nth-child(6n + 4) { grid-column: span 3; }
+  .aushadh-card-wrapper:nth-child(6n + 5) { grid-column: span 2; }
+  .aushadh-card-wrapper:nth-child(6n + 6) { grid-column: span 4; }
+}
+
+/* ─── Medicine Card ───────────────────────── */
+.aushadh-card {
+  position: relative;
+  height: 520px;
+  border-radius: 28px;
+  background: rgba(30, 26, 22, 0.4);
+  border: 1px solid rgba(255,255,255,0.05);
+  backdrop-filter: blur(12px);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.aushadh-card:hover {
+  border-color: rgba(61, 175, 114, 0.3);
+  box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+}
+
+.aushadh-card-image {
+  position: relative;
+  width: 100%;
+  height: 52%;
+  background-color: #121212;
+  overflow: hidden;
+}
+
+.aushadh-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+  opacity: 0.8;
+}
+
+.aushadh-card:hover .aushadh-card-image img {
+  transform: scale(1.1);
+  opacity: 1;
+}
+
+.aushadh-gradient-overlay {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 70%;
+  background: linear-gradient(0deg, rgba(30, 26, 22, 1) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+.aushadh-card-badges {
+  position: absolute;
+  top: 1.25rem; right: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.5rem;
+}
+
+.aushadh-validity-badge {
+  padding: 0.4rem 0.9rem;
+  border-radius: 99px;
+  background: rgba(14,12,10,0.85);
+  backdrop-filter: blur(12px);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--text);
+  border: 1px solid rgba(255,255,255,0.1);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.aushadh-verify-badge {
+  padding: 0.4rem 0.9rem;
+  border-radius: 99px;
+  background: rgba(61, 175, 114, 0.15);
+  border: 1px solid var(--patta);
+  color: var(--patta);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 600;
+}
+
+.aushadh-status-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.is-sealed { background: var(--patta); box-shadow: 0 0 10px var(--patta); }
+.is-opened { background: var(--haldi); box-shadow: 0 0 10px var(--haldi); }
+
+.aushadh-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.aushadh-card-body {
+  padding: 2rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.aushadh-card-title {
+  font-family: var(--font-heading);
+  font-size: 1.75rem;
+  color: var(--text);
+  line-height: 1.1;
+}
+
+.aushadh-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+}
+
+.aushadh-chip {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.05);
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.aushadh-btn-claim {
+  margin-top: auto;
+  width: 100%;
+  padding: 1.1rem;
+  border-radius: 16px;
+  border: 1px solid var(--patta);
+  background: transparent;
+  color: var(--patta);
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.aushadh-btn-claim .btn-glow {
+  position: absolute;
+  top: 50%; left: -100%;
+  width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(61, 175, 114, 0.2), transparent);
+  transform: skewX(-20deg) translateY(-50%);
+  transition: 0.6s;
+}
+
+.aushadh-btn-claim:hover {
+  background: var(--patta);
+  color: var(--bg);
+  box-shadow: 0 0 30px rgba(61, 175, 114, 0.4);
+}
+
+.aushadh-btn-claim:hover .btn-glow {
+  left: 100%;
+}
+
+.aushadh-stamp-claimed {
+  position: absolute;
+  top: 40%; left: 50%;
+  transform: translate(-50%, -50%) rotate(-10deg);
+  font-family: var(--font-heading);
+  font-size: 5rem;
+  font-weight: 900;
+  color: var(--patta);
+  border: 6px solid var(--patta);
+  padding: 0.5rem 2rem;
+  opacity: 0.6;
+  z-index: 20;
+  pointer-events: none;
+  text-shadow: 0 0 20px rgba(0,0,0,0.5);
+}
+
+.aushadh-loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  gap: 2rem;
+}
+
+.loading-spinner {
+  width: 40px; height: 40px;
+  border: 3px solid rgba(61, 175, 114, 0.1);
+  border-top-color: var(--patta);
+  border-radius: 50%;
+  animation: spin 1s infinite linear;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (max-width: 1024px) {
+  .aushadh-filters-wrapper { flex-direction: column; align-items: stretch; gap: 1rem; }
+  .aushadh-search-box { width: 100% !important; }
+  .aushadh-content-area { padding: 2rem; }
+}
+
+/* ─── Empty State ─────────────────────────── */
+.aushadh-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 8rem 2rem;
+  text-align: center;
+  gap: 2rem;
+}
+
+.pill-anim-wrapper {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  animation: float-pill 4s ease-in-out infinite alternate;
+}
+
+.empty-pill-svg {
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: var(--muted);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.3;
+}
+
+@keyframes float-pill {
+  from { transform: translateY(-8px) rotate(-5deg); }
+  to { transform: translateY(8px) rotate(5deg); }
+}
+
+.aushadh-empty-text {
+  font-family: var(--font-body);
+  font-size: 1.1rem;
+  color: var(--muted);
+  max-width: 300px;
+  opacity: 0.8;
+}

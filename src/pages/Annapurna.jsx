@@ -1,70 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Annapurna.css';
 import { MapPin, Box, Search } from 'lucide-react';
-
-/* ─── Mock Data ────────────────────────────────────── */
-const MOCK_LISTINGS = [
-  {
-    id: 1,
-    title: "Rajma Chawal (40 Plates)",
-    location: "North Mess, Block B",
-    quantity: "40 kg",
-    timeLimit: "Pickup by: 6:00 PM",
-    isUrgent: true,
-    isClaimed: false,
-    image: "https://images.unsplash.com/photo-1543339308-43e59d6b73a6?q=80&w=1000&auto=format&fit=crop"
-  },
-  {
-    id: 2,
-    title: "Fresh Sandwiches & Juice",
-    location: "Seminar Hall 3",
-    quantity: "15 packs",
-    timeLimit: "Pickup by: 4:30 PM",
-    isUrgent: false,
-    isClaimed: false,
-    image: "https://images.unsplash.com/photo-1512152272829-4081b8e84182?q=80&w=1000&auto=format&fit=crop"
-  },
-  {
-    id: 3,
-    title: "Leftover Event Buffet",
-    location: "Auditorium Backstage",
-    quantity: "Mixed (Big)",
-    timeLimit: "Exp: 2:00 PM",
-    isUrgent: false,
-    isClaimed: true,
-    image: "https://images.unsplash.com/photo-1504670414369-17ce284ce402?q=80&w=1000&auto=format&fit=crop"
-  },
-  {
-    id: 4,
-    title: "Packaged Curd & Bread",
-    location: "East Wing Kitchen",
-    quantity: "20 items",
-    timeLimit: "Pickup by: 8:00 PM",
-    isUrgent: false,
-    isClaimed: false,
-    image: "https://images.unsplash.com/photo-1484723091702-caa90f9b09de?q=80&w=1000&auto=format&fit=crop"
-  },
-  {
-    id: 5,
-    title: "Vegetable Salad Tubs",
-    location: "Cafe Coffee Day Outpost",
-    quantity: "8 tubs",
-    timeLimit: "Pickup by: 3:00 PM",
-    isUrgent: true,
-    isClaimed: false,
-    image: "https://images.unsplash.com/photo-1511690655006-25f052d43e59?q=80&w=1000&auto=format&fit=crop"
-  },
-  {
-    id: 6,
-    title: "Pizza Slices (Boxed)",
-    location: "CS Dept Lounge",
-    quantity: "12 slices",
-    timeLimit: "Pickup by: 7:00 PM",
-    isUrgent: false,
-    isClaimed: false,
-    image: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?q=80&w=1000&auto=format&fit=crop"
-  }
-];
+import api from '../lib/api';
 
 const FILTERS = ["All", "Cooked Meals", "Packaged", "Raw Materials", "Beverages", "Snacks"];
 
@@ -87,20 +24,22 @@ const EmptyState = () => (
   </div>
 );
 
-const FoodCard = ({ item }) => {
+const FoodCard = ({ item, onClaim }) => {
+  const isClaimed = item.status === 'Claimed';
+  
   return (
-    <div className={`anna-card ${item.isClaimed ? 'is-claimed' : ''}`}>
+    <div className={`anna-card ${isClaimed ? 'is-claimed' : ''}`}>
       <div className="anna-card-image">
-        <img src={item.image} alt={item.title} loading="lazy" />
+        <img src={item.image || 'https://images.unsplash.com/photo-1543339308-43e59d6b73a6?q=80&w=1000&auto=format&fit=crop'} alt={item.title} loading="lazy" />
         <div className="anna-gradient-overlay" />
         
-        {item.isClaimed && (
+        {isClaimed && (
           <div className="anna-stamp-claimed">Claimed</div>
         )}
 
-        {!item.isClaimed && (
+        {!isClaimed && (
           <div className={`anna-pickup-badge ${item.isUrgent ? 'pulse-urgent' : ''}`}>
-            {item.timeLimit}
+            {item.timeLimit || 'Available'}
           </div>
         )}
       </div>
@@ -117,10 +56,10 @@ const FoodCard = ({ item }) => {
           </div>
         </div>
 
-        {item.isClaimed ? (
+        {isClaimed ? (
           <div className="anna-btn-claimed-state">Already Claimed</div>
         ) : (
-          <button className="anna-btn-claim">Claim Food</button>
+          <button className="anna-btn-claim" onClick={() => onClaim?.(item._id)}>Claim Food</button>
         )}
       </div>
     </div>
@@ -131,9 +70,38 @@ const FoodCard = ({ item }) => {
 /* ─── Main Page ────────────────────────────────────── */
 export default function Annapurna() {
   const [activeFilter, setActiveFilter] = useState("All");
+  const [listings, setListings] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // Mocking empty state if a specific filter (e.g. Beverages) is clicked
-  const displayedListings = activeFilter === "Beverages" ? [] : MOCK_LISTINGS;
+  useEffect(() => {
+    loadListings();
+  }, []);
+
+  const loadListings = async () => {
+    try {
+      const data = await api.getListings({ module: 'Annapurna' });
+      setListings(data);
+    } catch (err) {
+      console.error('Failed to load listings:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleClaim = async (listingId) => {
+    try {
+      await api.claimListing(listingId, '680e5c5b1234567890000001');
+      loadListings();
+    } catch (err) {
+      console.error('Failed to claim:', err);
+    }
+  };
+
+  const filteredListings = activeFilter === "All" 
+    ? listings 
+    : listings.filter(item => item.category === activeFilter);
+
+  const displayedListings = activeFilter === "Beverages" ? [] : filteredListings;
 
   return (
     <div className="annapurna-page">
@@ -167,13 +135,17 @@ export default function Annapurna() {
 
       {/* Grid Content */}
       <main className="anna-content-area">
-        {displayedListings.length === 0 ? (
+        {loading ? (
+          <div className="anna-empty-state">
+            <div className="anna-empty-text">Loading...</div>
+          </div>
+        ) : displayedListings.length === 0 ? (
           <EmptyState />
         ) : (
           <div className="anna-grid">
             {displayedListings.map((item) => (
-              <div key={item.id} className="anna-card-wrapper">
-                <FoodCard item={item} />
+              <div key={item._id} className="anna-card-wrapper">
+                <FoodCard item={item} onClaim={handleClaim} />
               </div>
             ))}
           </div>

@@ -76,6 +76,21 @@
   gap: 1.5rem;
 }
 
+.wallet-chip {
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 999px;
+  padding: 0.4rem 0.75rem;
+  text-decoration: none;
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  background: rgba(255,255,255,0.02);
+}
+
+.wallet-chip:hover {
+  border-color: rgba(61, 175, 114, 0.5);
+}
+
 .topbar-brand {
   font-family: var(--font-heading);
   font-size: 1.5rem;
@@ -566,4 +581,5 @@
   }
   .bento-cell-1, .bento-cell-2, .bento-cell-5 { grid-column: span 1; }
   .topbar-brand { display: none; }
+  .wallet-chip { display: none; }
 }

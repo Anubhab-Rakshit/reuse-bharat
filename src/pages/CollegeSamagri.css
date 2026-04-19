@@ -1,0 +1,463 @@
+/* ════════════════════════════════════════════════
+   College Samagri (The Exchange) Page
+════════════════════════════════════════════════ */
+
+.samagri-page {
+  min-height: 100vh;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  padding-left: 100px;
+  position: relative;
+}
+
+.paper-texture-overlay {
+  position: fixed;
+  inset: 0;
+  background-image: url("https://www.transparenttextures.com/patterns/natural-paper.png");
+  opacity: 0.03;
+  pointer-events: none;
+  z-index: 100;
+}
+
+@media (max-width: 768px) {
+  .samagri-page {
+    padding-left: 0;
+    padding-bottom: 90px;
+  }
+}
+
+/* ─── Header ──────────────────────────────── */
+.samagri-header {
+  position: relative;
+  width: 100%;
+  padding: 8rem 4rem 6rem;
+  background: radial-gradient(circle at 70% 30%, rgba(232, 75, 53, 0.08) 0%, transparent 60%);
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+  overflow: hidden;
+}
+
+.samagri-header-bg-text {
+  position: absolute;
+  top: -5%; left: -5%;
+  font-family: var(--font-devanagari);
+  font-size: clamp(8rem, 20vw, 25rem);
+  font-weight: 700;
+  color: var(--sindoor);
+  opacity: 0.04;
+  user-select: none;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.samagri-header-content {
+  position: relative;
+  z-index: 10;
+  max-width: 850px;
+}
+
+.samagri-overline {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 5px;
+  color: var(--sindoor);
+  margin-bottom: 1.5rem;
+  display: block;
+  opacity: 0.8;
+}
+
+.samagri-title {
+  font-family: var(--font-heading);
+  font-size: clamp(3.5rem, 8vw, 5.5rem);
+  color: var(--text);
+  line-height: 0.95;
+  margin-bottom: 1.5rem;
+  font-weight: 800;
+}
+
+.samagri-subtitle {
+  font-family: var(--font-body);
+  font-size: 1.35rem;
+  color: var(--muted);
+  max-width: 650px;
+  line-height: 1.6;
+}
+
+.samagri-decor {
+  position: absolute;
+  top: 0; right: 0; bottom: 0; left: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.decor-book, .decor-cap {
+  position: absolute;
+  color: var(--sindoor);
+  opacity: 0.1;
+}
+
+.decor-book { top: 20%; right: 10%; }
+.decor-cap { bottom: 15%; right: 25%; }
+
+/* ─── Sticky Filter Bar ─────────────────────── */
+.samagri-filters-wrapper {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  padding: 1.25rem 4rem;
+  background: rgba(14, 12, 10, 0.7);
+  backdrop-filter: blur(24px) saturate(150%);
+  -webkit-backdrop-filter: blur(24px) saturate(150%);
+  z-index: 50;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+}
+
+.samagri-filters-track {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.samagri-filter-pill {
+  padding: 0.5rem 1.25rem;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.05);
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.samagri-filter-pill:hover {
+  border-color: var(--sindoor);
+  color: var(--text);
+}
+
+.samagri-filter-pill.active {
+  background: var(--sindoor);
+  border-color: var(--sindoor);
+  color: var(--text);
+  font-weight: 600;
+  box-shadow: 0 4px 20px rgba(232, 75, 53, 0.3);
+}
+
+.samagri-search-box {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.6rem 1.25rem;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 8px;
+  color: var(--muted);
+  width: 300px;
+  transition: all 0.3s ease;
+}
+
+.samagri-search-box:focus-within {
+  border-color: var(--sindoor);
+  background: rgba(255,255,255,0.05);
+}
+
+.samagri-search-box input {
+  background: none;
+  border: none;
+  color: var(--text);
+  outline: none;
+  font-size: 0.9rem;
+  width: 100%;
+}
+
+/* ─── Grid Layout ─────────────────────────── */
+.samagri-content-area {
+  padding: 4rem;
+  flex: 1;
+}
+
+.samagri-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 2rem;
+}
+
+.samagri-card-wrapper {
+  grid-column: span 6;
+}
+
+@media (min-width: 1200px) {
+  .samagri-card-wrapper:nth-child(6n + 1) { grid-column: span 4; }
+  .samagri-card-wrapper:nth-child(6n + 2) { grid-column: span 2; }
+  .samagri-card-wrapper:nth-child(6n + 3) { grid-column: span 3; }
+  .samagri-card-wrapper:nth-child(6n + 4) { grid-column: span 3; }
+  .samagri-card-wrapper:nth-child(6n + 5) { grid-column: span 2; }
+  .samagri-card-wrapper:nth-child(6n + 6) { grid-column: span 4; }
+}
+
+/* ─── Item Card ───────────────────────────── */
+.samagri-card {
+  position: relative;
+  height: 520px;
+  border-radius: 20px;
+  background: rgba(30, 26, 22, 0.4);
+  border: 1px solid rgba(255,255,255,0.05);
+  backdrop-filter: blur(12px);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.samagri-card:hover {
+  border-color: rgba(232, 75, 53, 0.3);
+  box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+}
+
+.samagri-card-image {
+  position: relative;
+  width: 100%;
+  height: 52%;
+  background-color: #121212;
+  overflow: hidden;
+}
+
+.samagri-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+  opacity: 0.8;
+}
+
+.samagri-card:hover .samagri-card-image img {
+  transform: scale(1.1);
+  opacity: 1;
+}
+
+.samagri-gradient-overlay {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 70%;
+  background: linear-gradient(0deg, rgba(30, 26, 22, 1) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+.samagri-bookmark-tag {
+  position: absolute;
+  top: 0; right: 2rem;
+  width: 45px; height: 70px;
+  background: var(--sindoor);
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding-bottom: 10px;
+  z-index: 10;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.bookmark-content {
+  transform: rotate(90deg);
+  white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.bookmark-tail {
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 0; height: 0;
+  border-left: 22.5px solid transparent;
+  border-right: 22.5px solid transparent;
+  border-bottom: 15px solid rgba(30, 26, 22, 1);
+}
+
+.samagri-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+  gap: 1rem;
+}
+
+.samagri-card-body {
+  padding: 2rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.samagri-card-title {
+  font-family: var(--font-heading);
+  font-size: 1.75rem;
+  color: var(--text);
+  line-height: 1.1;
+  flex: 1;
+}
+
+.samagri-free-badge, .samagri-swap-badge {
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.samagri-free-badge { background: var(--patta); color: var(--bg); }
+.samagri-swap-badge { background: var(--haldi); color: var(--bg); }
+
+.samagri-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+}
+
+.samagri-chip {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 6px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.05);
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.samagri-btn-claim {
+  margin-top: auto;
+  width: 100%;
+  padding: 1.1rem;
+  border-radius: 12px;
+  border: 1px solid var(--sindoor);
+  background: transparent;
+  color: var(--sindoor);
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.btn-sweep {
+  position: absolute;
+  top: 0; left: -100%;
+  width: 100%; height: 100%;
+  background: var(--sindoor);
+  transition: left 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: -1;
+}
+
+.samagri-btn-claim:hover {
+  color: var(--bg);
+}
+
+.samagri-btn-claim:hover .btn-sweep {
+  left: 0;
+}
+
+.samagri-stamp-claimed {
+  position: absolute;
+  top: 40%; left: 50%;
+  transform: translate(-50%, -50%) rotate(-10deg);
+  font-family: var(--font-heading);
+  font-size: 5rem;
+  font-weight: 900;
+  color: var(--sindoor);
+  border: 6px solid var(--sindoor);
+  padding: 0.5rem 2rem;
+  opacity: 0.6;
+  z-index: 20;
+  pointer-events: none;
+}
+
+.samagri-loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  gap: 2rem;
+}
+
+.shelf-loader {
+  width: 60px; height: 4px;
+  background: rgba(232, 75, 53, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.shelf-loader::after {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 100%; height: 100%;
+  background: var(--sindoor);
+  animation: load 1.5s infinite ease-in-out;
+}
+
+@keyframes load {
+  to { left: 100%; }
+}
+
+@media (max-width: 1024px) {
+  .samagri-filters-wrapper { flex-direction: column; align-items: stretch; gap: 1rem; }
+  .samagri-search-box { width: 100% !important; }
+  .samagri-content-area { padding: 2rem; }
+}
+
+/* ─── Empty State ─────────────────────────── */
+.samagri-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 8rem 2rem;
+  text-align: center;
+  gap: 2rem;
+}
+
+.book-anim-wrapper {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  animation: sway-book 4s ease-in-out infinite alternate;
+}
+
+.empty-book-svg {
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: var(--muted);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.3;
+}
+
+@keyframes sway-book {
+  from { transform: rotate(-5deg) translateY(-4px); }
+  to { transform: rotate(5deg) translateY(4px); }
+}
+
+.samagri-empty-text {
+  font-family: var(--font-body);
+  font-size: 1.1rem;
+  color: var(--muted);
+  max-width: 300px;
+  opacity: 0.8;
+}
